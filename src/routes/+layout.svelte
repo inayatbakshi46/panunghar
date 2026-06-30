@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
 </svelte:head>
 
-<div class="container mx-auto font-body">
+<div class="font-sans">
 	<Navbar />
 	{@render children()}
 	<Footer />
