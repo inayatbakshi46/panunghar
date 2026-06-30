@@ -1,5 +1,7 @@
 <script>
   import { onMount } from 'svelte';
+  // 1. Import the asset directly so your bundler processes and hashes it for production
+  import heroBg from '$lib/assets/hero.jpeg';
 
   let heroSection;
   let title;
@@ -11,7 +13,7 @@
     // Dynamically import GSAP only when the component hits the browser
     const { gsap } = await import('gsap');
 
-    // Initial Intro Animation (runs beautifully without any SSR flashing or crashes)
+    // Initial Intro Animation
     gsap.to([title, subtitle, description, ctaButton], {
       opacity: 1,
       x: 0,        
@@ -27,7 +29,7 @@
   <section 
     bind:this={heroSection}
     class="relative w-full h-screen flex items-center justify-start px-6 md:px-16 lg:px-24 bg-cover bg-center overflow-hidden"
-    style="background-image: url('src/lib/assets/hero.jpeg');"
+    style="background-image: url('{heroBg}');"
   >
     <!-- Vignette / Dark Ambient Overlay to keep text perfectly legible -->
     <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-10"></div>
