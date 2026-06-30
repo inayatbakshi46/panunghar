@@ -1,17 +1,18 @@
 <script>
   import { onMount } from 'svelte';
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
   // Define our column references for GSAP
   let col1, col2, col3;
 
-  onMount(() => {
+  onMount(async () => {
+    // 1. Safely load GSAP and ScrollTrigger only in the browser
+    const { gsap } = await import('gsap');
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+
     // Register the ScrollTrigger plugin inside the browser context
     gsap.registerPlugin(ScrollTrigger);
 
-    // Set initial hidden states instantly
-    gsap.set([col1, col2, col3], { opacity: 0, y: 20 });
+    // No need for gsap.set() since CSS classes now handle the hidden state
 
     // Animate each column cleanly when the footer hits the viewport
     const trigger1 = gsap.to(col1, { opacity: 1, y: 0, duration: 0.6, delay: 0, scrollTrigger: { trigger: col1, start: "top 90%" } });
@@ -32,8 +33,8 @@
 
 <footer class="w-full flex flex-col md:flex-row md:items-start justify-between items-center gap-12 md:gap-6 p-8 bg-white border-t border-gray-100">
   
-  <!-- Column 1: Brand & Socials -->
-  <div bind:this={col1} class="flex flex-col items-center gap-3 mx-auto text-center md:items-start md:text-left">
+  <!-- Column 1: Brand & Socials (Added opacity-0 translate-y-5) -->
+  <div bind:this={col1} class="flex flex-col items-center gap-3 mx-auto text-center md:items-start md:text-left opacity-0 translate-y-5">
     <h1 class="text-4xl font-bold font-heading text-gray-900">Panun Ghar</h1>
     <div class="flex gap-4 justify-center md:justify-start text-gray-600">
       
@@ -63,15 +64,15 @@
     </div>
   </div>
 
-  <!-- Column 2: Navigation Links -->
-  <div bind:this={col2} class="flex flex-col gap-2 items-center mx-auto text-gray-600 font-medium">
+  <!-- Column 2: Navigation Links (Added opacity-0 translate-y-5) -->
+  <div bind:this={col2} class="flex flex-col gap-2 items-center mx-auto text-gray-600 font-medium opacity-0 translate-y-5">
     <a href="/" class="hover:text-gray-900 transition-colors">About</a>
     <a href="/" class="hover:text-gray-900 transition-colors">Contact</a>
     <a href="/" class="hover:text-gray-900 transition-colors">Privacy Policy</a>
   </div>
 
-  <!-- Column 3: Location Details -->
-  <div bind:this={col3} class="flex flex-col gap-2 items-center mx-auto text-center md:items-start md:text-left">
+  <!-- Column 3: Location Details (Added opacity-0 translate-y-5) -->
+  <div bind:this={col3} class="flex flex-col gap-2 items-center mx-auto text-center md:items-start md:text-left opacity-0 translate-y-5">
     <h1 class="font-bold text-gray-900 uppercase tracking-wider text-xs">Location</h1>
     <p class="text-gray-500 max-w-[200px]">123 Main Street, City, State 12345</p>
   </div>

@@ -1,6 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  import { gsap } from 'gsap';
 
   let heroSection;
   let title;
@@ -8,13 +7,14 @@
   let description;
   let ctaButton;
 
-  onMount(() => {
-    // 1. We no longer need gsap.set since Tailwind classes handle the initial hidden state.
-    
-    // 2. Initial Intro Animation (Runs smoothly without any flash of un-styled content)
+  onMount(async () => {
+    // Dynamically import GSAP only when the component hits the browser
+    const { gsap } = await import('gsap');
+
+    // Initial Intro Animation (runs beautifully without any SSR flashing or crashes)
     gsap.to([title, subtitle, description, ctaButton], {
       opacity: 1,
-      x: 0,        // Overrides translate-x-10 and pulls elements back to their true position
+      x: 0,        
       duration: 2,       
       stagger: 0.5,      
       ease: 'power1.out',  

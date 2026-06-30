@@ -1,16 +1,21 @@
 <script>
   import { onMount } from 'svelte';
-  import gsap from 'gsap';
 
   let isOpen = false;
   let menuContainer;
   let backdrop;
-  let menuLinks = [];
+  let menuLinks = []; // We will store DOM references here dynamically
   let tl;
 
-  onMount(() => {
+  onMount(async () => {
+    // 1. Safe dynamic import for SSR environments
+    const { gsap } = await import('gsap');
+
     // Initialize GSAP timeline (paused by default)
     tl = gsap.timeline({ paused: true });
+
+    // Filter out any empty or unrendered items from our links array
+    const validLinks = menuLinks.filter(Boolean);
 
     // Animate both the Backdrop and Menu Drawer together
     tl.to(backdrop, {
@@ -23,8 +28,8 @@
       x: '0%',
       ease: 'power3.out'
     }, 0)
-    // Stagger Menu Links
-    .to(menuLinks, {
+    // Stagger Menu Links safely using the filtered array
+    .to(validLinks, {
       duration: 0.4,
       opacity: 1,
       y: 0,
@@ -34,6 +39,9 @@
   });
 
   function toggleMenu() {
+    // Guard clause: make sure the timeline has been initialized by onMount before running
+    if (!tl) return; 
+
     isOpen = !isOpen;
     if (isOpen) {
       tl.play();
@@ -91,6 +99,7 @@
   <!-- Links Container -->
   <ul class="flex flex-col items-center gap-8 text-3xl font-semibold my-auto pb-20">
     {#each links as link, i}
+      <!-- Fixed array element binding for Svelte loops -->
       <li 
         bind:this={menuLinks[i]} 
         class="opacity-0 translate-y-8"
